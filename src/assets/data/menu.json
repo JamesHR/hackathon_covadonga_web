@@ -1,0 +1,16 @@
+[{
+        "nombre": "Inicio ",
+        "icono": "dashboard.png",
+        "redirect": "/dashboard"
+    },
+    {
+        "nombre": "Citas medicas ",
+        "icono": "ventas.png",
+        "redirect": "/dashboard/visits"
+    },
+    {
+        "nombre": "Pacientes ",
+        "icono": "reportes.png",
+        "redirect": "/dashboard/visits"
+    }
+]
