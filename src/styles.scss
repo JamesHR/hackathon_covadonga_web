@@ -108,7 +108,7 @@ body {
 
 // Color de fila al pasar mouse
 .mat-row:hover .mat-cell {
-    background-color: #fda00021;
+    background-color: #0f61f915;
     cursor: pointer;
 }
 
@@ -166,7 +166,7 @@ th {
 // boton primario 
 .btn-primario {
     // background: #FFBB12 !important;
-    box-shadow: 0px 4px 8px rgba(255, 191, 0, 0.3) !important;
+    box-shadow: 0px 4px 8px #014cbd6e !important;
     border-radius: 16px !important;
     color: #1B1C21 !important;
 }
@@ -176,10 +176,10 @@ th {
 .mat-raised-button.mat-primary,
 .mat-fab.mat-primary,
 .mat-mini-fab.mat-primary {
-    background-color: #FFBB12;
-    color: rgba(10, 25, 49, 1);
+    background-color: #0F62F9;
+    color: rgb(255, 255, 255);
     border-radius: 25px;
-    box-shadow: 0px 4px 8px rgba(255, 191, 0, 0.3);
+    box-shadow: 0px 4px 8px #2979f062;
 }
 
 .btn-bordes-redondeados {

@@ -1,7 +1,5 @@
-import { ViewChild, Component, OnInit } from '@angular/core';
-import { SelectionModel } from '@angular/cdk/collections';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { Visits } from '../../../models/visits';
 
 import { MatDialog} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -9,31 +7,33 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { AllServicesService } from '../../../services/all-services.service';
+import { SelectionModel } from '@angular/cdk/collections';
 
-import { VisitsFormComponent } from './visits-form/visits-form.component';
+import { Patients } from 'src/app/models/patients';
+import { PatientsFormComponent } from './patients-form/patients-form.component';
+
+
 @Component({
-  selector: 'app-visits',
-  templateUrl: './visits.component.html',
-  styleUrls: ['./visits.component.scss']
+  selector: 'app-patients',
+  templateUrl: './patients.component.html',
+  styleUrls: ['./patients.component.scss']
 })
-export class VisitsComponent implements OnInit {
+export class PatientsComponent implements OnInit {
   estado : number = 1;
   filtro: number = 1;
   
   opcionCrud: string = "agregar";
   btnCrud: boolean = true;
   
-  visit: Visits ={
-    idVisit: " ",
-    idPatient: "",
-    idVisitStatus: ""
+  patient: Patients ={
+   
   }
 
-  ELEMENT_DATA!: Visits[];
+  ELEMENT_DATA!: Patients[];
   
-  displayedColumns: string[] = ['select','idVisit', 'idPatient', 'idVisitStatus', 'date'];
-  dataSource = new MatTableDataSource<Visits>(this.ELEMENT_DATA);
-  selection = new SelectionModel<Visits>(false, []);
+  displayedColumns: string[] = ['select', 'curp', 'name', 'email'];
+  dataSource = new MatTableDataSource<Patients>(this.ELEMENT_DATA);
+  selection = new SelectionModel<Patients>(false, []);
 
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort, {static:true}) sort!: MatSort;
@@ -43,55 +43,50 @@ export class VisitsComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    // this.cargarVisits(this.filtro);
-    this.cargarVisits();
+    // this.cargarpatients(this.filtro);
+    this.cargarpatients();
   }
 
   // -----------------------------------------------------
   limpiarObjeto(){
-    this.visit ={
+    this.patient ={
 
     }
   }
  
   aplicarFiltro() {
     this.filtro = this.estado;
-    // this.cargarVisits(this.filtro);
-    this.cargarVisits();
+    // this.cargarpatients(this.filtro);
+    this.cargarpatients();
     this.limpiarbtnCrud();
   }
   
-  // public cargarVisits(filtro1:number){
-  //   let resp = this.allServices.getVisits(filtro1);
-  //   resp.subscribe(resp=> this.dataSource.data=resp as Visits[]);
-  // }
 
-
-   public cargarVisits(){
-    let resp = this.allServices.getVisits();
-    resp.subscribe(resp=> this.dataSource.data=resp as Visits[]);
+   public cargarpatients(){
+    let resp = this.allServices.getPatients();
+    resp.subscribe(resp=> this.dataSource.data=resp as Patients[]);
   }
 
   
   agregar(){
     this.opcionCrud = "agregar";
-    const dialogRef = this.dialog.open(VisitsFormComponent, {
-      data: { visit: this.visit, opcionCrud: this.opcionCrud }
+    const dialogRef = this.dialog.open(PatientsFormComponent, {
+      data: { patient: this.patient, opcionCrud: this.opcionCrud }
     });
     dialogRef.afterClosed().subscribe(
       (result) => {
         if( result ) {
-          if( this.visit.idPatient.trim().length === 0 ){
+          if( this.patient.idPatient.trim().length === 0 ){
             return;
           }
           else{
-             this.allServices.postVisit( this.visit)
+             this.allServices.postPatient( this.patient)
               .subscribe( 
                           resp => {
-                          this.openSnackBar( 'Se agrego ', this.visit.idVisit);
-                          // console.log('Respuesta', resp.idvisit)
-                          // this.cargarVisits(1); 
-                          this.cargarVisits(); 
+                          this.openSnackBar( 'Se agrego ', this.patient.idPatient);
+                          // console.log('Respuesta', resp.idpatient)
+                          // this.cargarpatients(1); 
+                          this.cargarpatients(); 
 
                           this.aplicarFiltro();
                           this.limpiarObjeto();
@@ -100,11 +95,11 @@ export class VisitsComponent implements OnInit {
                           if(error.status == '4001'){
 
                             console.log(error.status);
-                            this.openSnackBar('Ya existe ', this.visit.idVisit);
+                            this.openSnackBar('Ya existe ', this.patient.idPatient);
                           }
                           else{
                             console.log('error inesperado');
-                            console.log(this.visit);
+                            console.log(this.patient);
                           }
                          }               
               )              
@@ -115,24 +110,24 @@ export class VisitsComponent implements OnInit {
   }
 
   editar(){
-    this.visit = this.selection.selected[0];
+    this.patient = this.selection.selected[0];
     this.opcionCrud = "editar";
-    const dialogRef = this.dialog.open(VisitsFormComponent, {
-      data: { visit: this.visit, opcionCrud: this.opcionCrud }
+    const dialogRef = this.dialog.open(PatientsFormComponent, {
+      data: { patient: this.patient, opcionCrud: this.opcionCrud }
     });
     dialogRef.afterClosed().subscribe(
       (result) => {
         if( result ) {
-          if( this.visit.idPatient.trim().length === 0 ){
+          if( this.patient.idPatient.trim().length === 0 ){
             return;
           }
           else{
-             this.allServices.putVisit(this.visit)
+             this.allServices.putPatient(this.patient)
               .subscribe( resp => {
-                this.openSnackBar( 'Se edito ', this.visit.idPatient);
+                this.openSnackBar( 'Se edito ', this.patient.idPatient);
                 console.log('Respuesta', resp)
                 this.aplicarFiltro();
-                // this.cargarVisits(1); 
+                // this.cargarpatients(1); 
                 this.limpiarObjeto();
               })
               
@@ -143,22 +138,22 @@ export class VisitsComponent implements OnInit {
   }
 
   eliminar(){
-    this.visit = this.selection.selected[0];
-    //  console.log(this.visit);
+    this.patient = this.selection.selected[0];
+    //  console.log(this.patient);
      this.opcionCrud = "eliminar";
-     const dialogRef = this.dialog.open(VisitsFormComponent, {
-      data: { visit: this.visit, opcionCrud: this.opcionCrud }
+     const dialogRef = this.dialog.open(PatientsFormComponent, {
+      data: { patient: this.patient, opcionCrud: this.opcionCrud }
     });
     dialogRef.afterClosed().subscribe(
       (result) => {
         if( result ) {
-          if( this.visit.idPatient.trim().length === 0 ){
+          if( this.patient.idPatient.trim().length === 0 ){
             return;
           }
           else{
-             this.allServices.deleteVisit( this.visit.idPatient)
+             this.allServices.deletePatient( this.patient.idPatient)
               .subscribe( resp => {
-                this.openSnackBar( 'Se elimino ', this.visit.idPatient);
+                this.openSnackBar( 'Se elimino ', this.patient.idPatient);
                 console.log('Respuesta', resp)
                 this.aplicarFiltro();
                 this.limpiarObjeto();
@@ -170,11 +165,11 @@ export class VisitsComponent implements OnInit {
   } 
 
   verDetalle(){
-    this.visit = this.selection.selected[0];
-    //  console.log(this.visit);
+    this.patient = this.selection.selected[0];
+    //  console.log(this.patient);
      this.opcionCrud = "detalle";
-     const dialogRef = this.dialog.open(VisitsFormComponent, {
-      data: { visit: this.visit, opcionCrud: this.opcionCrud }
+     const dialogRef = this.dialog.open(PatientsFormComponent, {
+      data: { patient: this.patient, opcionCrud: this.opcionCrud }
     });
     this.limpiarObjeto();
   }
